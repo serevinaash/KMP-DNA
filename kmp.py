@@ -23,6 +23,7 @@ def kmp_search(pattern, text):
     j = 0
     pattern_count = 0
     comparison_count = 0
+    match_indices = []
 
     while i < n:
         comparison_count += 1
@@ -32,13 +33,15 @@ def kmp_search(pattern, text):
 
         if j == m:
             pattern_count += 1
+            match_indices.append(i - j)
             j = lps[j - 1]
         elif i < n and pattern[j] != text[i]:
             if j != 0:
                 j = lps[j - 1]
             else:
                 i += 1
-    return pattern_count, comparison_count
+
+    return pattern_count, comparison_count, match_indices
 
 # Pola yang dicari
 pattern = "GCAATAATTTGATATCCTATCACGATGGAAGCTACCTTAAAAAA"
@@ -49,7 +52,8 @@ with open('DNA.txt', 'r') as file:
     text = file.read().replace('\n', '')
 
 # Menjalankan KMP search
-pattern_count, comparison_count = kmp_search(pattern, text)
+pattern_count, comparison_count, match_indices = kmp_search(pattern, text)
 
 print(f"Pattern muncul sebanyak {pattern_count} kali.")
 print(f"Proses pembandingan dilakukan sebanyak {comparison_count} kali.")
+print(f"Indeks kecocokan: {match_indices}")
